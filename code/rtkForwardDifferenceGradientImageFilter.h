@@ -92,7 +92,8 @@ public:
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef TOperatorValueType                  OperatorValueType;
   typedef TOutputValueType                    OutputValueType;
-  typedef typename OutputImageType::PixelType OutputCovariantVectorType;
+
+  typedef typename OutputImageType::PixelType OutputPixelType;
 
   typedef itk::CovariantVector<
     OutputValueType, itkGetStaticConstMacro(OutputImageDimension) >
@@ -207,19 +208,19 @@ private:
     if ( this->m_UseImageDirection )
       {
       CovariantVectorType physicalGradient;
-      for( unsigned int i =0; i <  OutputCovariantVectorType::Dimension ; ++i )
+      for( unsigned int i =0; i <  OutputPixelType::Dimension ; ++i )
         {
         physicalGradient[i] = it.Value()[i];
         }
       it.GetImage()->TransformLocalVectorToPhysicalVector( gradient, physicalGradient);
-      for( unsigned int i =0; i <  OutputCovariantVectorType::Dimension ; ++i )
+      for( unsigned int i =0; i <  OutputPixelType::Dimension ; ++i )
         {
         it.Value()[i] = physicalGradient[i];
         }
       }
     else
       {
-      for( unsigned int i =0; i <  OutputCovariantVectorType::Dimension ; ++i )
+      for( unsigned int i =0; i <  OutputPixelType::Dimension ; ++i )
         {
         it.Value()[i] = gradient[i];
         }
