@@ -1,6 +1,6 @@
 name: Build, test, package
 
-on: [push,pull_request]
+on: [push,pull_request, workflow_dispatch]
 
 concurrency:
   group: '${{ github.workflow }}@${{ github.head_ref || github.run_id }}'
@@ -11,11 +11,14 @@ jobs:
     uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v5.4.7
 
   python-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.7
+    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@main
     with:
       cmake-options: '-DRTK_BUILD_APPLICATIONS:BOOL=OFF'
-      python3-minor-versions: ${{ github.event_name == 'pull_request' && '["11"]' || '["9","10","11"]' }}
-      itk-python-package-tag: 'release-5.4'
+      python3-minor-versions: '["11"]'
+      itk-python-package-tag: 'itk6-build-system-v2'
+      itk-wheel-tag: 'v6.0rc01.dev20260915'
+      itk-python-package-org: 'BRAINSia'
+      manylinux-platforms: '["_2_28-x64"]'
     secrets:
       pypi_password: ${{ secrets.pypi_password }}
 
